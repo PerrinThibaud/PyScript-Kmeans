@@ -88,9 +88,14 @@ main {
     color: var(--secondary-color);
 }
 
-#header-title>.actions>button:hover,
-#header-title>.actions>button:focus {
+#header-title>.actions>button:not(:disabled):hover,
+#header-title>.actions>button:not(:disabled):focus {
     background-color: rgba(0, 0, 0, 0.15);
+}
+
+#header-title>.actions>button:disabled {
+    opacity: 0.25;
+    cursor: default;
 }
 
 #slider-container {
@@ -109,6 +114,8 @@ main {
     flex-flow: nowrap;
     gap: 1.5rem;
     width: fit-content;
+    transform: translateX(0rem);
+    transition: 0.25s ease-in-out;
 }
 
 #slider>.slider-item {
@@ -118,7 +125,6 @@ main {
     width: 16rem;
     border-radius: 0.125rem;
     overflow: hidden;
-    transition: 0.25s ease-in-out;
 }
 
 #slider>.slider-item>.item-header {

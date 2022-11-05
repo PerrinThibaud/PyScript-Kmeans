@@ -1,0 +1,10 @@
+{
+    "autoclose_loader": true,
+    "runtimes": [
+        {
+            "src": "../static/pyodide/pyodide.js",
+            "name": "pyodide-0.20",
+            "lang": "python"
+        }
+    ]
+}
