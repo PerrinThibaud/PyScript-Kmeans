@@ -4,23 +4,260 @@
     <title></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="css/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./static/css/fonts.css" />
+    <link rel="stylesheet" href="./static/css/stylesheet.css" />
+    <link rel="stylesheet" href="./static/css/site.css" />
 
-    <script
+    <!--<script
       type="text/javascript"
       src="https://cdn.jsdelivr.net/npm/@holoviz/panel@0.13.1/dist/panel.min.js"
     ></script>
     <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
-    <!-- prettier-ignore -->
-    <py-env>
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script> -->
+    <!-- prettier-ignore-start -->
+    <!--<py-env>
         - numpy
         - pandas
         - matplotlib
         - seaborn
         - scikit-learn
         - panel==0.13.1a2
-    </py-env>
+    </py-env>-->
+    <!-- prettier-ignore-end -->
   </head>
-  <body></body>
+  <body id="body">
+    <main>
+      <!-- Header section, title and slider actions -->
+      <div id="header-title">
+        <div class="title">
+          <h3>K-Means Image Compression : K =</h3>
+          <input
+            type="number"
+            id="kmeans"
+            name="kmeans"
+            required
+            min="10"
+            max="255"
+            value="16"
+          />
+        </div>
+        <div class="actions">
+          <button type="button" id="previous"><</button>
+          <button type="button" id="next">></button>
+        </div>
+      </div>
+
+      <!-- Section that contain the slider and it's items -->
+      <div id="slider-container">
+        <div id="slider">
+          <div class="slider-item">
+            <div class="item-header">
+              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
+              <img
+                src="./static/images/tmp/zh.webp"
+                alt=""
+                class="img-content"
+              />
+            </div>
+            <div class="item-body">
+              <h4>254 colors = 1.5Mo</h4>
+            </div>
+          </div>
+
+          <div class="slider-item compressed">
+            <div class="item-header">
+              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
+              <img
+                src="./static/images/tmp/zh.webp"
+                alt=""
+                class="img-content"
+              />
+            </div>
+            <div class="item-body">
+              <h4>254 colors = 1.5Mo</h4>
+            </div>
+          </div>
+
+          <div class="slider-item">
+            <div class="item-header">
+              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
+              <img
+                src="./static/images/tmp/zh.webp"
+                alt=""
+                class="img-content"
+              />
+            </div>
+            <div class="item-body">
+              <h4>254 colors = 1.5Mo</h4>
+            </div>
+          </div>
+
+          <div class="slider-item compressed">
+            <div class="item-header">
+              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
+              <img
+                src="./static/images/tmp/zh.webp"
+                alt=""
+                class="img-content"
+              />
+            </div>
+            <div class="item-body">
+              <h4>254 colors = 1.5Mo</h4>
+            </div>
+          </div>
+
+          <div class="slider-item">
+            <div class="item-header">
+              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
+              <img
+                src="./static/images/tmp/zh.webp"
+                alt=""
+                class="img-content"
+              />
+            </div>
+            <div class="item-body">
+              <h4>254 colors = 1.5Mo</h4>
+            </div>
+          </div>
+
+          <div class="slider-item compressed">
+            <div class="item-header">
+              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
+              <img
+                src="./static/images/tmp/zh.webp"
+                alt=""
+                class="img-content"
+              />
+            </div>
+            <div class="item-body">
+              <h4>254 colors = 1.5Mo</h4>
+            </div>
+          </div>
+
+          <div class="slider-item">
+            <div class="item-header">
+              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
+              <img
+                src="./static/images/tmp/zh.webp"
+                alt=""
+                class="img-content"
+              />
+            </div>
+            <div class="item-body">
+              <h4>254 colors = 1.5Mo</h4>
+            </div>
+          </div>
+
+          <div class="slider-item compressed">
+            <div class="item-header">
+              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
+              <img
+                src="./static/images/tmp/zh.webp"
+                alt=""
+                class="img-content"
+              />
+            </div>
+            <div class="item-body">
+              <h4>254 colors = 1.5Mo</h4>
+            </div>
+          </div>
+
+          <div class="slider-item">
+            <div class="item-header">
+              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
+              <img
+                src="./static/images/tmp/zh.webp"
+                alt=""
+                class="img-content"
+              />
+            </div>
+            <div class="item-body">
+              <h4>254 colors = 1.5Mo</h4>
+            </div>
+          </div>
+
+          <div class="slider-item compressed">
+            <div class="item-header">
+              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
+              <img
+                src="./static/images/tmp/zh.webp"
+                alt=""
+                class="img-content"
+              />
+            </div>
+            <div class="item-body">
+              <h4>254 colors = 1.5Mo</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Button to add a new item -->
+      <div id="add-action">
+        <div class="add-button">
+          <input
+            type="file"
+            id="new-image"
+            name="new-image"
+            accept="image/png, image/jpeg"
+          />
+          <h4>Add an image</h4>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <!-- Copyright -->
+      <p class="subtitle1">
+        A pyscript demo app by
+        <a href="https://github.com/PerrinThibaud" target="_blank"
+          >@PerrinThibaud</a
+        >, copyright 2022.
+      </p>
+      <!-- Socials link -->
+      <nav>
+        <ul>
+          <li>
+            <a href="https://github.com/PerrinThibaud" target="_blank">
+              <img
+                src="./static/images/socials/github.svg#icon-1"
+                alt="github Thibaud Perrin"
+                title="github Thibaud Perrin"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.behance.net/ThibaudPerrin" target="_blank">
+              <img
+                src="./static/images/socials/behance.svg"
+                alt="behance Thibaud Perrin"
+                title="behance Thibaud Perrin"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://dribbble.com/ThibaudP" target="_blank">
+              <img
+                src="./static/images/socials/dribbble.svg#icon-1"
+                alt="dribbble Thibaud Perrin"
+                title="dribbble Thibaud Perrin"
+              />
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://www.linkedin.com/in/thibaud-perrin/"
+              target="_blank"
+            >
+              <img
+                src="./static/images/socials/linkedin.svg#icon-1"
+                alt="linkedin Thibaud Perrin"
+                title="linkedin Thibaud Perrin"
+              />
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </footer>
+  </body>
 </html>
