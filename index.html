@@ -1,29 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title></title>
+    <title>PyScript Kmeans images compression</title>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <link rel="stylesheet" href="./static/pyscript/pyscript.css" />
+    <!-- <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" /> -->
     <link rel="stylesheet" href="./static/css/fonts.css" />
     <link rel="stylesheet" href="./static/css/stylesheet.css" />
     <link rel="stylesheet" href="./static/css/site.css" />
 
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/npm/@holoviz/panel@0.13.1/dist/panel.min.js"
-    ></script>
-    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    <script defer src="./static/pyscript/pyscript.js"></script>
+    <py-config type="json" src="./static/python/pyconfig.json"></py-config>
+    <!-- <script defer src="https://pyscript.net/latest/pyscript.js"></script> -->
     <!-- prettier-ignore -->
     <py-env>
-        - numpy
-        - pandas
-        - matplotlib
-        - seaborn
-        - scikit-learn
-        - panel==0.13.1a2
         - paths:
             - ./static/python/client.py
+            - ./static/python/db_api.py
+            - ./static/python/kmeans.py
+        - numpy
     </py-env>
   </head>
   <body id="body">
@@ -31,31 +29,31 @@
       <!-- Header section, title and slider actions -->
       <div id="header-title">
         <div class="title">
-          <h3>K-Means Image Compression : K =</h3>
-          <input
-            type="number"
-            id="kmeans"
-            name="kmeans"
-            required
-            min="10"
-            max="255"
-            value="16"
-          />
+          <h3>K-Means Image Compression :</h3>
+          <h3>
+            K =
+            <input
+              type="number"
+              id="kmeans"
+              name="kmeans"
+              required
+              min="10"
+              max="255"
+              value="16"
+            />
+          </h3>
         </div>
         <div class="actions">
           <button type="button" id="previous"><</button>
           <button type="button" id="next">></button>
         </div>
       </div>
-
       <!-- Section that contain the slider and it's items -->
       <div id="slider-container">
-        <div id="slider">
-          <div class="slider-item">
+        <!-- /!\ inside not #slider because css:empty <div class="slider-item">
             <div class="item-header">
-              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
               <img
-                src="./static/images/tmp/zh.webp"
+                src="#"
                 alt=""
                 class="img-content"
               />
@@ -63,134 +61,8 @@
             <div class="item-body">
               <h4>254 colors = 1.5Mo</h4>
             </div>
-          </div>
-
-          <div class="slider-item compressed">
-            <div class="item-header">
-              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
-              <img
-                src="./static/images/tmp/zh.webp"
-                alt=""
-                class="img-content"
-              />
-            </div>
-            <div class="item-body">
-              <h4>254 colors = 1.5Mo</h4>
-            </div>
-          </div>
-
-          <div class="slider-item">
-            <div class="item-header">
-              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
-              <img
-                src="./static/images/tmp/zh.webp"
-                alt=""
-                class="img-content"
-              />
-            </div>
-            <div class="item-body">
-              <h4>254 colors = 1.5Mo</h4>
-            </div>
-          </div>
-
-          <div class="slider-item compressed">
-            <div class="item-header">
-              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
-              <img
-                src="./static/images/tmp/zh.webp"
-                alt=""
-                class="img-content"
-              />
-            </div>
-            <div class="item-body">
-              <h4>254 colors = 1.5Mo</h4>
-            </div>
-          </div>
-
-          <div class="slider-item">
-            <div class="item-header">
-              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
-              <img
-                src="./static/images/tmp/zh.webp"
-                alt=""
-                class="img-content"
-              />
-            </div>
-            <div class="item-body">
-              <h4>254 colors = 1.5Mo</h4>
-            </div>
-          </div>
-
-          <div class="slider-item compressed">
-            <div class="item-header">
-              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
-              <img
-                src="./static/images/tmp/zh.webp"
-                alt=""
-                class="img-content"
-              />
-            </div>
-            <div class="item-body">
-              <h4>254 colors = 1.5Mo</h4>
-            </div>
-          </div>
-
-          <div class="slider-item">
-            <div class="item-header">
-              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
-              <img
-                src="./static/images/tmp/zh.webp"
-                alt=""
-                class="img-content"
-              />
-            </div>
-            <div class="item-body">
-              <h4>254 colors = 1.5Mo</h4>
-            </div>
-          </div>
-
-          <div class="slider-item compressed">
-            <div class="item-header">
-              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
-              <img
-                src="./static/images/tmp/zh.webp"
-                alt=""
-                class="img-content"
-              />
-            </div>
-            <div class="item-body">
-              <h4>254 colors = 1.5Mo</h4>
-            </div>
-          </div>
-
-          <div class="slider-item">
-            <div class="item-header">
-              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
-              <img
-                src="./static/images/tmp/zh.webp"
-                alt=""
-                class="img-content"
-              />
-            </div>
-            <div class="item-body">
-              <h4>254 colors = 1.5Mo</h4>
-            </div>
-          </div>
-
-          <div class="slider-item compressed">
-            <div class="item-header">
-              <img src="./static/images/tmp/zh.webp" alt="" class="img-back" />
-              <img
-                src="./static/images/tmp/zh.webp"
-                alt=""
-                class="img-content"
-              />
-            </div>
-            <div class="item-body">
-              <h4>254 colors = 1.5Mo</h4>
-            </div>
-          </div>
-        </div>
+          </div> -->
+        <div id="slider"></div>
       </div>
 
       <!-- Button to add a new item -->
@@ -200,7 +72,7 @@
             type="file"
             id="new-image"
             name="new-image"
-            accept="image/png, image/jpeg"
+            accept="image/jpeg"
           />
           <h4>Add an image</h4>
         </div>
@@ -260,5 +132,12 @@
         </ul>
       </nav>
     </footer>
+    <div id="loader" class="hide">
+      <h4>
+        Loading:
+        <span id="loader-text"></span>
+      </h4>
+    </div>
+    <py-script src="./static/python/client.py"></py-script>
   </body>
 </html>

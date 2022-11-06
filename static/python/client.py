@@ -136,8 +136,10 @@ def onload_read_file(e = None):
 
         context.drawImage(img, 0, 0 )
         image_data = context.getImageData(0, 0, img.width, img.height)
+        update_loader(True, 'Converting the image...')
         np_image = np.array(list(image_data.data))
 
+        update_loader(True, 'Image resizing...')
         np_image = np_image.reshape(img.height, img.width, 4) # reshaping image
         np_image = KMEANS.resize(np_image) # resize the image with a maximale size of 256
 
@@ -147,12 +149,15 @@ def onload_read_file(e = None):
         np_image = np_image / 255
         original_colors = np.unique(np_image, axis=0)
 
+        update_loader(True, 'Loading k mean...')
         KMEANS.reset(np_image)
-        centroids, idx = KMEANS.run()
+        centroids, idx = KMEANS.run(update_loader)
         np_new_image, new_colors = KMEANS.reshape(centroids, idx, alpha)
         
+        update_loader(True, 'Images generation ...')
         generate_image(list(np_new_image), len(new_colors), True)
         generate_image(list(np.concatenate([ np_image * 255, alpha], axis = 1).reshape(-1)), len(original_colors))
+        update_loader(False, '')
 
         if evt:
             evt.preventDefault()
@@ -164,11 +169,24 @@ def onload_read_file(e = None):
         e.preventDefault()
     return False
 
+def update_loader(display, message):
+    loader = document.getElementById('loader')
+    loader_text = document.getElementById('loader-text')
+
+    if display:
+        loader_text.innerHTML = message
+        remove_class(loader, 'hide')
+    else :
+        loader_text.innerHTML = ''
+        add_class(loader, 'hide')
+
+
 # Method to add the event on the input file
 def add_file_event():
     def evt(e=None):
         try:
             if len(list(e.target.files)) > 0:
+                update_loader(True, 'Reading file')
                 reader = FileReader.new();
                 reader.readAsDataURL(list(e.target.files)[0]);
                 reader.onload = onload_read_file

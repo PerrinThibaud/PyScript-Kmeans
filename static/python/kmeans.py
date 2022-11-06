@@ -86,7 +86,7 @@ class Kmeans:
             centroids[k] = np.mean(points, axis = 0)
         return centroids
 
-    def run(self):
+    def run(self, debug):
         """
         In the data matrix X, each row of X is a single example
         """
@@ -100,7 +100,9 @@ class Kmeans:
         for i in range(self.max_iters):
             
             #Output progress
-            print("K-Means iteration %d/%d" % (i, self.max_iters-1))
+            if debug:
+                debug(True, "K-Means iteration %d/%d" % (i, self.max_iters-1))
+            # print("K-Means iteration %d/%d" % (i, self.max_iters-1))
             # For each example in X, assign it to the closest centroid
             idx = self.find_closest_centroids(centroids)
             

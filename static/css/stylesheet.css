@@ -129,7 +129,6 @@ button {
     text-transform: uppercase;
 }
 
-/* 
 @media only screen and (max-width: 600px) {}
 
 
@@ -140,17 +139,15 @@ button {
 }
 
 @media only screen and (min-width: 768px) {}
-*/
+
 /* Large devices (laptops/desktops, 992px and up) */
-/* 
 @media only screen and (min-width: 992px) {
     html {
         font-size: calc((100vw * 16) / 1280) !important;
     }
-} */
+}
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
-/*
 @media only screen and (min-width: 1280px) {
     html {
         font-size: calc((100vw * 12) / 1280) !important;
@@ -162,4 +159,3 @@ button {
 @media screen and (min-width: 1000px) {}
 
 @media screen and (min-width: 1920) {}
-*/

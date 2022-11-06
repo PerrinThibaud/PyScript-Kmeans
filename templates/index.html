@@ -29,16 +29,19 @@
       <!-- Header section, title and slider actions -->
       <div id="header-title">
         <div class="title">
-          <h3>K-Means Image Compression : K =</h3>
-          <input
-            type="number"
-            id="kmeans"
-            name="kmeans"
-            required
-            min="10"
-            max="255"
-            value="16"
-          />
+          <h3>K-Means Image Compression :</h3>
+          <h3>
+            K =
+            <input
+              type="number"
+              id="kmeans"
+              name="kmeans"
+              required
+              min="10"
+              max="255"
+              value="16"
+            />
+          </h3>
         </div>
         <div class="actions">
           <button type="button" id="previous"><</button>
@@ -129,6 +132,12 @@
         </ul>
       </nav>
     </footer>
+    <div id="loader" class="hide">
+      <h4>
+        Loading:
+        <span id="loader-text"></span>
+      </h4>
+    </div>
     <py-script src="/static/python/client.py"></py-script>
   </body>
 </html>
