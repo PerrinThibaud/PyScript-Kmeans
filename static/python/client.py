@@ -1,5 +1,6 @@
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 import pyodide
+from sys import getsizeof
 
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 import numpy as np
@@ -9,8 +10,10 @@ import db_api
 
 # noinspection PyPackages
 from db_api import Database
+from kmeans import Kmeans
 
 DATABASE: Database = db_api.download_db()
+KMEANS: Kmeans = Kmeans(np.array([]))
 
 def main():
     check_slider_buttons()
@@ -67,6 +70,10 @@ def add_slider_events():
     previous_button.onclick = previous_evt
     next_button.onclick = next_evt
 
+def image_size(b64string): 
+    return ((len(b64string) * 3) / 4 - b64string.count('=', -2)) / 1000;
+
+# https://github.com/pyscript/pyscript/blob/main/examples/numpy_canvas_fractals.html
 # Method to fire when a file is loaded
 def onload_read_file(e = None):
     img = Image.new()
@@ -75,7 +82,7 @@ def onload_read_file(e = None):
     def on_load(evt=None):
         canvas = document.createElement('canvas')
         context = canvas.getContext('2d')
-
+    
         console.log('img.width', img.width)
         console.log('img.height', img.height)
         console.log('img', img)
@@ -87,10 +94,25 @@ def onload_read_file(e = None):
         image_data = context.getImageData(0, 0, img.width, img.height)
 
         np_image = np.array(list(image_data.data))
+        np_image = np_image.reshape(img.width, img.height, 4) # reshaping image
+        KMEANS.reset(np_image)
+        np_image = KMEANS.resize(np_image) # resize the image with a maximale size of 256
+        print(np_image.shape)
         np_image = np_image.reshape(-1, 4) # reshaping by 4 because rgba
+        np_image, alpha = np_image[:, :3], np_image[:, 3] # we remove alpha transparency value
         print(np_image.shape)
         np_image = np_image / 255
-        print(np_image)
+        original_colors = np.unique(np_image, axis=0)
+        console.log(f"number of colors = {len(original_colors)}")
+        console.log(f"size = {image_size(img.src)}B")
+        KMEANS.reset(np_image)
+        centroids, idx = KMEANS.run()
+        np_new_image, new_colors = KMEANS.reshape(centroids, idx, alpha, img.width, img.height)
+        console.log(f"new number of colors = {len(new_colors)}")
+
+        print(np_new_image.shape)
+        print(np_new_image)
+        console.log(f"size = {round(getsizeof(np_new_image) / 1024,2)}KB")
         if evt:
             evt.preventDefault()
         return False
