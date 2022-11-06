@@ -83,7 +83,8 @@ class Kmeans:
         # - |𝐶𝑘| is the number of examples in the set 𝐶𝑘
         for k in range(self.K):   
             points = self.X[idx == k]
-            centroids[k] = np.mean(points, axis = 0)
+            if len(points) > 0:
+                centroids[k] = np.mean(points, axis = 0)
         return centroids
 
     def run(self, debug):
