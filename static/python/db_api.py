@@ -31,10 +31,10 @@ class Database:
 
 def get_db() -> dict:
     return {
-        "number": 10,
+        "number": 0,
         "index": 0,
         "maxLeft": True,
-        "maxRight": False
+        "maxRight": True
     }
 
 def download_db() -> Database:

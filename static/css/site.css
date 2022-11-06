@@ -116,6 +116,15 @@ main {
     width: fit-content;
     transform: translateX(0rem);
     transition: 0.25s ease-in-out;
+    min-height: 22rem;
+}
+
+#slider:empty:after {
+    content: '';
+    height: 22rem;
+    width: 16rem;
+    border-radius: 0.125rem;
+    border: 0.125rem dashed var(--secondary-color);
 }
 
 #slider>.slider-item {
@@ -125,6 +134,7 @@ main {
     width: 16rem;
     border-radius: 0.125rem;
     overflow: hidden;
+    animation: 0.25s ease-in-out forwards appear;
 }
 
 #slider>.slider-item>.item-header {
@@ -134,31 +144,12 @@ main {
     height: 100%;
 }
 
-#slider>.slider-item>.item-header>.img-back,
 #slider>.slider-item>.item-header>.img-content {
     display: block;
     width: 100%;
     height: 100%;
 }
 
-#slider>.slider-item>.item-header>.img-back {
-    position: absolute;
-    top: 0;
-    left: 0;
-    object-fit: cover;
-    z-index: 1;
-}
-
-#slider>.slider-item>.item-header::after {
-    content: '';
-    position: absolute;
-    backdrop-filter: blur(15px);
-    z-index: 2;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-}
 
 #slider>.slider-item>.item-header>.img-content {
     position: relative;
@@ -178,6 +169,7 @@ main {
 
 #slider>.slider-item>.item-body>h4 {
     color: var(--main-color);
+    text-align: center;
 }
 
 #slider>.slider-item.compressed>.item-body>h4 {
@@ -292,4 +284,16 @@ nav>ul>li>a>img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+@keyframes appear {
+    from {
+        transform: scale(.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }

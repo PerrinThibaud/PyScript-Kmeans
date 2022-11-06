@@ -2,16 +2,18 @@ import numpy as np
 
 class Kmeans:
     def __init__(self, X: np.array, K: int = 16, max_iters: int = 10):
-        self.X: np.array = X
+        self.X: np.array = np.array(X, copy=True)
         self.K: int = K
         self.max_iters: int = max_iters
         self.initial_centroids: np.array = self.kMeans_init_centroids()
     
-    def reset(self, X: np.array, K: int = 16, max_iters: int = 10):
-        self.X: np.array = X
-        self.K: int = K
+    def reset(self, X: np.array, max_iters: int = 10):
+        self.X: np.array = np.array(X, copy=True)
         self.max_iters: int = max_iters
         self.initial_centroids: np.array = self.kMeans_init_centroids()
+    
+    def set_k(self, K: int = 16):
+        self.K: int = K
 
     def kMeans_init_centroids(self):
         """
@@ -107,20 +109,17 @@ class Kmeans:
             centroids = self.compute_centroids(idx)
         return centroids, idx
 
-    def reshape(self, centroids, idx, alpha, width, height):
+    def reshape(self, centroids, idx, alpha):
         X_recovered = centroids[idx, :] 
 
         colors_number = np.unique(X_recovered, axis=0) # count the number of color who is normally equals to K
-        print('---------->')
-        print(X_recovered.shape)
-        print(alpha.shape)
-        alpha = alpha.reshape(-1, 1)
-        print(alpha.shape)
-        print('<----------')
-        X_recovered = np.concatenate([ X_recovered, alpha], axis = 1) # adding the aplha column
+
+        X_recovered = np.concatenate([ X_recovered * 255, alpha], axis = 1) # adding the aplha column
+
 
         # Reshape recovered image into proper dimensions
-        X_recovered = X_recovered.reshape(width, height, 4) # reshaping to the initial size
+        # X_recovered = X_recovered.reshape(256, 256, 4) # reshaping to the initial size
+        X_recovered = X_recovered.reshape(-1) # reshaping image data size (flatten)
         return X_recovered, colors_number
 
     # to n and divisible by m
@@ -149,15 +148,13 @@ class Kmeans:
         width, height, a = img.shape
         min_size = min(width, height)
         min_size = self.closest_number(min_size, 256)
-        startx = height//2-(min_size//2)
         starty = width//2-(min_size//2)
-        return img[starty:starty+min_size, startx:startx+min_size]
+        startx = height//2-(min_size//2)
+        return img[starty:starty+min_size, startx:startx+min_size, :]
 
     def resize(self, large_image):
         large_image = self.crop(large_image)
         width, height, alpha = large_image.shape
-
-        print(width, height, alpha)
 
         input_size = width
         output_size = 256

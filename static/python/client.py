@@ -4,7 +4,7 @@ from sys import getsizeof
 
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 import numpy as np
-from js import document, console, Image, FileReader
+from js import document, console, Image, FileReader, Uint8ClampedArray, Object, Event
 # noinspection PyPackages
 import db_api
 
@@ -19,6 +19,7 @@ def main():
     check_slider_buttons()
     add_slider_events()
     add_file_event()
+    add_K_event()
 
 def check_slider_buttons():
     previous_button = document.getElementById('previous')
@@ -73,6 +74,53 @@ def add_slider_events():
 def image_size(b64string): 
     return ((len(b64string) * 3) / 4 - b64string.count('=', -2)) / 1000;
 
+def generate_slider_item(image, colors, compressed = False):
+    slider = document.getElementById('slider')
+    slider_item = Object.assign(
+        document.createElement('div'),
+    )
+    add_class(slider_item, 'slider-item')
+    if compressed:
+        add_class(slider_item, 'compressed')
+    html_string = f"""
+        <div class="item-header">
+            <img
+                src="{image}"
+                alt="img-content"
+                class="img-content"
+            />
+        </div>
+        <div class="item-body">
+            <h4>{colors} colors -> {round(image_size(image),2)}KB</h4>
+        </div>
+    """
+    slider_item.innerHTML = html_string
+    slider.prepend(slider_item)
+    DATABASE.increment_db()
+    check_slider_buttons()
+
+def generate_image(rgba_array, colors, compressed=False):
+    size = 256
+    width = size
+    height = size
+    canvas = document.createElement('canvas')
+    ctx = canvas.getContext('2d')
+    canvas.width = width
+    canvas.height = height
+
+    buffer = Uint8ClampedArray.new(len(rgba_array))
+
+    for i in range(0, len(rgba_array), 4):
+        buffer[i] = rgba_array[i]
+        buffer[i+1] = rgba_array[i+1]
+        buffer[i+2] = rgba_array[i+2]
+        buffer[i+3] = rgba_array[i+3]
+
+    idata = ctx.createImageData(width, height);
+    idata.data.set(buffer);
+    ctx.putImageData(idata, 0, 0);
+    generate_slider_item(canvas.toDataURL(), colors, compressed)
+
 # https://github.com/pyscript/pyscript/blob/main/examples/numpy_canvas_fractals.html
 # Method to fire when a file is loaded
 def onload_read_file(e = None):
@@ -83,36 +131,29 @@ def onload_read_file(e = None):
         canvas = document.createElement('canvas')
         context = canvas.getContext('2d')
     
-        console.log('img.width', img.width)
-        console.log('img.height', img.height)
-        console.log('img', img)
-
         canvas.width = img.width
         canvas.height = img.height
 
         context.drawImage(img, 0, 0 )
         image_data = context.getImageData(0, 0, img.width, img.height)
-
         np_image = np.array(list(image_data.data))
-        np_image = np_image.reshape(img.width, img.height, 4) # reshaping image
-        KMEANS.reset(np_image)
+
+        np_image = np_image.reshape(img.height, img.width, 4) # reshaping image
         np_image = KMEANS.resize(np_image) # resize the image with a maximale size of 256
-        print(np_image.shape)
+
         np_image = np_image.reshape(-1, 4) # reshaping by 4 because rgba
-        np_image, alpha = np_image[:, :3], np_image[:, 3] # we remove alpha transparency value
-        print(np_image.shape)
+        np_image, alpha = np_image[:, :3], np_image[:, 3:] # we remove alpha transparency value
+
         np_image = np_image / 255
         original_colors = np.unique(np_image, axis=0)
-        console.log(f"number of colors = {len(original_colors)}")
-        console.log(f"size = {image_size(img.src)}B")
+
         KMEANS.reset(np_image)
         centroids, idx = KMEANS.run()
-        np_new_image, new_colors = KMEANS.reshape(centroids, idx, alpha, img.width, img.height)
-        console.log(f"new number of colors = {len(new_colors)}")
+        np_new_image, new_colors = KMEANS.reshape(centroids, idx, alpha)
+        
+        generate_image(list(np_new_image), len(new_colors), True)
+        generate_image(list(np.concatenate([ np_image * 255, alpha], axis = 1).reshape(-1)), len(original_colors))
 
-        print(np_new_image.shape)
-        print(np_new_image)
-        console.log(f"size = {round(getsizeof(np_new_image) / 1024,2)}KB")
         if evt:
             evt.preventDefault()
         return False
@@ -127,18 +168,35 @@ def onload_read_file(e = None):
 def add_file_event():
     def evt(e=None):
         try:
-            reader = FileReader.new();
-            reader.readAsDataURL(list(e.target.files)[0]);
-            reader.onload = onload_read_file
+            if len(list(e.target.files)) > 0:
+                reader = FileReader.new();
+                reader.readAsDataURL(list(e.target.files)[0]);
+                reader.onload = onload_read_file
+                new_image_button.value = ''
             if e:
                 e.preventDefault()
             return False
         except Exception as x:
             print("Error add file: {}".format(x))
             return False
-
     new_image_button = document.getElementById('new-image')
     new_image_button.onchange = evt
+
+    
+def add_K_event():
+    def evt(e=None):
+        try:
+            value = int(e.target.value)
+            if value > 0 and value < 255:
+                KMEANS.set_k(value)
+            if e:
+                e.preventDefault()
+            return False
+        except Exception as x:
+            print("Error add file: {}".format(x))
+            return False
+    kmeans_button = document.getElementById('kmeans')
+    kmeans_button.onchange = evt
 
 def remove_class(element, class_name):
     element.classList.remove(class_name)
